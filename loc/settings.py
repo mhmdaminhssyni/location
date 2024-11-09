@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from local_settings import *
+from .local_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'document.apps.PostsConfig',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Allauth Account Middleware
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'loc.urls'
@@ -86,6 +97,33 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+LOGIN_REDIRECT_URL = ''
+LOGOUT_REDIRECT_URL = ''
+
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Set to 'mandatory' if you want email verification
+ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_EMAIL_REQUIRED = False
+SOCIALACCOUNT_QUERY_EMAIL = True
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '121117183500-2en0tvudfejf2c1h2eihpendtgr0bekj.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    }
+
+}
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -122,7 +160,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
